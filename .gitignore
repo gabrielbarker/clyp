@@ -11,6 +11,3 @@ Cargo.lock
 
 # Clyps generated during testing
 clyps/
-
-# clyp config file
-clyp.config
