@@ -24,3 +24,48 @@ impl ClypRepository {
     return [&self.clyps_dir, &name].iter().collect();
   }
 }
+
+#[cfg(test)]
+mod clyprepo_tests {
+  use super::ClypRepository;
+  use tempfile::tempdir;
+
+  #[test]
+  fn save_clyp_file_is_created() {
+    let dir = tempdir().expect("could not create temporary directory");
+    let path_str = dir
+      .path()
+      .to_str()
+      .expect("could not convert tempdir path to str");
+
+    let repo = ClypRepository::new(String::from(path_str));
+    let name = "testclyp";
+    let content = "test content";
+    repo.save_clyp(name.to_string(), content.to_string());
+
+    let file_path = std::path::Path::new(path_str).join(name);
+    assert_eq!(file_path.exists(), true);
+
+    let file_content = std::fs::read_to_string(file_path).expect("could not read file");
+    assert_eq!(file_content, content);
+  }
+
+  #[test]
+  fn read_clyp_file_is_read() {
+    let dir = tempdir().expect("could not create temporary directory");
+    let path_str = dir
+      .path()
+      .to_str()
+      .expect("could not convert tempdir path to str");
+
+    let name = "testclyp";
+    let content = "test content";
+    let file_path = std::path::Path::new(path_str).join(name);
+    std::fs::write(file_path, content).expect("could not write file");
+
+    let repo = ClypRepository::new(String::from(path_str));
+    let clyp_content = repo.read_clyp(name.to_string());
+
+    assert_eq!(clyp_content, content);
+  }
+}
