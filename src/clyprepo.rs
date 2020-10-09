@@ -36,12 +36,13 @@ impl ClypRepository {
 #[cfg(test)]
 mod clyprepo_tests {
   use super::ClypRepository;
-  use std::fs::{read_to_string, write};
+  use std::fs::{read_dir, read_to_string, write};
+  use std::path::Path;
   use tempfile::tempdir;
 
   #[test]
   fn save_clyp_file_is_created() {
-    let dir = tempdir().expect("could not create temporary directory");
+    let dir = get_temp_dir();
     let path_str = dir
       .path()
       .to_str()
@@ -52,7 +53,7 @@ mod clyprepo_tests {
     let content = "test content";
     repo.save_clyp(name.to_string(), content.to_string());
 
-    let file_path = std::path::Path::new(path_str).join(name);
+    let file_path = Path::new(path_str).join(name);
     assert_eq!(file_path.exists(), true);
 
     let file_content = read_to_string(file_path).expect("could not read file");
@@ -61,7 +62,7 @@ mod clyprepo_tests {
 
   #[test]
   fn read_clyp_file_is_read() {
-    let dir = tempdir().expect("could not create temporary directory");
+    let dir = get_temp_dir();
     let path_str = dir
       .path()
       .to_str()
@@ -69,12 +70,37 @@ mod clyprepo_tests {
 
     let name = "testclyp";
     let content = "test content";
-    let file_path = std::path::Path::new(path_str).join(name);
+    let file_path = Path::new(path_str).join(name);
     write(file_path, content).expect("could not write file");
 
     let repo = ClypRepository::new(String::from(path_str));
     let clyp_content = repo.read_clyp(name.to_string());
 
     assert_eq!(clyp_content, content);
+  }
+
+  #[test]
+  fn clear_clyp_files_are_deleted() {
+    let dir = get_temp_dir();
+    let path_str = dir
+      .path()
+      .to_str()
+      .expect("could not convert tempdir path to str");
+
+    let names = ["testclyp1", "testclyp2", "testclyp3"];
+    let content = "test content";
+
+    for name in names.iter() {
+      write(Path::new(path_str).join(name), content).expect("could not write file");
+    }
+    assert_eq!(read_dir(path_str).unwrap().count(), 3);
+
+    let repo = ClypRepository::new(String::from(path_str));
+    repo.clear_clyps();
+    assert_eq!(read_dir(path_str).unwrap().count(), 0);
+  }
+
+  fn get_temp_dir() -> tempfile::TempDir {
+    return tempdir().expect("could not create temporary directory");
   }
 }
