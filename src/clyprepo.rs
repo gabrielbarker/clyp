@@ -1,6 +1,9 @@
+use std::fs::{create_dir, read_to_string, remove_dir_all, write};
+
 pub struct ClypRepository {
   clyps_dir: String,
 }
+
 impl ClypRepository {
   pub fn new(clyps_dir: String) -> ClypRepository {
     ClypRepository {
@@ -10,14 +13,19 @@ impl ClypRepository {
 
   pub fn save_clyp(&self, name: String, content: String) {
     let path = self.get_path_for_name(name);
-    std::fs::write(path, content).expect("Unable to write file");
+    write(path, content).expect("unable to write file");
   }
 
   pub fn read_clyp(&self, name: String) -> String {
     let path = self.get_path_for_name(name);
     let content =
-      std::fs::read_to_string(&path).expect(&format!("could not read file `{}`", path.display()));
+      read_to_string(&path).expect(&format!("could not read file `{}`", path.display()));
     return content;
+  }
+
+  pub fn clear_clyps(&self) {
+    remove_dir_all(&self.clyps_dir).expect("could not delete clyps");
+    create_dir(&self.clyps_dir).expect("could not create clyps directory");
   }
 
   fn get_path_for_name(&self, name: String) -> std::path::PathBuf {
@@ -28,6 +36,7 @@ impl ClypRepository {
 #[cfg(test)]
 mod clyprepo_tests {
   use super::ClypRepository;
+  use std::fs::{read_to_string, write};
   use tempfile::tempdir;
 
   #[test]
@@ -46,7 +55,7 @@ mod clyprepo_tests {
     let file_path = std::path::Path::new(path_str).join(name);
     assert_eq!(file_path.exists(), true);
 
-    let file_content = std::fs::read_to_string(file_path).expect("could not read file");
+    let file_content = read_to_string(file_path).expect("could not read file");
     assert_eq!(file_content, content);
   }
 
@@ -61,7 +70,7 @@ mod clyprepo_tests {
     let name = "testclyp";
     let content = "test content";
     let file_path = std::path::Path::new(path_str).join(name);
-    std::fs::write(file_path, content).expect("could not write file");
+    write(file_path, content).expect("could not write file");
 
     let repo = ClypRepository::new(String::from(path_str));
     let clyp_content = repo.read_clyp(name.to_string());
