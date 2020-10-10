@@ -50,6 +50,7 @@ fn save_or_read_clyp(save: bool, read: bool, name: Option<String>, repo: ClypRep
       .expect("could not add to clipboard");
   }
 }
+
 fn get_name(name: Option<String>) -> String {
   if name.is_some() {
     return name.unwrap();

@@ -118,7 +118,7 @@ mod clyprepo_tests {
   }
 
   #[test]
-  fn get_most_recent_clyp_files_are_deleted() {
+  fn get_most_recent_clyp_most_recent_clyp() {
     let dir = get_temp_dir();
     let path_str = dir
       .path()
