@@ -7,4 +7,4 @@ matrix:
       env: TARGET=x86_64-apple-darwin
 
 script:
-  - cargo test -- --nocapture
+  - cargo test
