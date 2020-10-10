@@ -37,11 +37,18 @@ impl ClypRepository {
       let metadata = std::fs::metadata(file_path.clone()).expect("");
       // let duration = metadata.modified().unwrap().duration_since(time).unwrap();
 
+      println!("{:?}", path);
       println!(
         "{}",
         metadata.modified().unwrap().elapsed().unwrap().as_millis()
       );
-      println!("{}", time.elapsed().unwrap().as_millis());
+      println!(
+        "{}",
+        time
+          .duration_since(std::time::SystemTime::UNIX_EPOCH)
+          .unwrap()
+          .as_millis()
+      );
 
       println!("{}", metadata.modified().unwrap() > time);
       if metadata.modified().unwrap() > time {
@@ -137,11 +144,10 @@ mod clyprepo_tests {
     for name in names.iter() {
       write(Path::new(path_str).join(name), content).expect("could not write file");
     }
+    std::thread::sleep(std::time::Duration::from_secs(1));
     let latest_name = "testclyp_latest";
     let latest_content = "test content latest";
     write(Path::new(path_str).join(latest_name), latest_content).expect("could not write file");
-
-    std::thread::sleep(std::time::Duration::from_secs(1));
 
     assert_eq!(read_dir(path_str).unwrap().count(), 4);
     let repo = ClypRepository::new(String::from(path_str));
