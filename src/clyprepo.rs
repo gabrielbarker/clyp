@@ -117,6 +117,7 @@ mod clyprepo_tests {
     assert_eq!(read_dir(path_str).unwrap().count(), 0);
   }
 
+  #[test]
   fn get_most_recent_clyp_files_are_deleted() {
     let dir = get_temp_dir();
     let path_str = dir
