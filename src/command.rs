@@ -17,7 +17,6 @@ struct Opts {
   #[structopt(short, long)]
   clear: bool,
   /// The name of the clyp
-  #[structopt(required_unless_one(&["clear", "help"]))]
   name: Option<String>,
 }
 
@@ -28,21 +27,32 @@ pub fn run_clyp_command(clyps_dir: &str) -> Result<(), Box<dyn std::error::Error
   if opts.clear {
     repo.clear_clyps();
   } else {
-    save_or_read_clyp(opts.save, opts.read, opts.name.unwrap(), repo);
+    save_or_read_clyp(opts.save, opts.read, opts.name, repo);
   }
   Ok(())
 }
 
-fn save_or_read_clyp(save: bool, read: bool, name: String, repo: ClypRepository) {
+fn save_or_read_clyp(save: bool, read: bool, name: Option<String>, repo: ClypRepository) {
   let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
 
   if save {
     let content = ctx.get_contents().expect("could not read from clipboard");
-    repo.save_clyp(name, content);
+    repo.save_clyp(get_name(name), content);
   } else if read {
-    let content = repo.read_clyp(name);
+    let content;
+    if name.is_some() {
+      content = repo.read_clyp(get_name(name));
+    } else {
+      content = repo.get_most_recent_clyp();
+    }
     ctx
       .set_contents(content)
       .expect("could not add to clipboard");
   }
+}
+fn get_name(name: Option<String>) -> String {
+  if name.is_some() {
+    return name.unwrap();
+  }
+  return ".temporary".to_string();
 }
