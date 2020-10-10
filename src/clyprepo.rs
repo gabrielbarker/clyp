@@ -133,10 +133,15 @@ mod clyprepo_tests {
     let latest_content = "test content latest";
     write(Path::new(path_str).join(latest_name), latest_content).expect("could not write file");
 
+    std::thread::sleep(std::time::Duration::from_secs(1));
+
     assert_eq!(read_dir(path_str).unwrap().count(), 4);
     let repo = ClypRepository::new(String::from(path_str));
     let clyp = repo.get_most_recent_clyp();
 
+    for en in read_dir(path_str).unwrap() {
+      println!("{}", en.unwrap().path().display())
+    }
     assert_eq!(clyp, latest_content);
   }
 
