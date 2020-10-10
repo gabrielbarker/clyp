@@ -7,39 +7,42 @@ use clyprepo::ClypRepository;
 
 /// Save and read clyps.
 #[derive(StructOpt)]
-struct Cli {
+struct Opts {
     /// Activate save mode
     #[structopt(short, long)]
     save: bool,
     /// Activate read mode
     #[structopt(short, long)]
     read: bool,
+    /// Clear all saved clyps
+    #[structopt(short, long)]
+    clear: bool,
     /// The name of the clyp
-    #[structopt()]
-    name: String,
+    #[structopt(required_unless_one(&["clear", "help"]))]
+    name: Option<String>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
     let repo = ClypRepository::new("/Users/gbarker/GitHub/clyp/clyps".to_string());
-    let name = Cli::from_args().name;
+    let opts = Opts::from_args();
 
-    if Cli::from_args().save {
-        let content = ctx.get_contents().expect("could not read from clipboard");
-        repo.save_clyp(name, content);
-    } else if Cli::from_args().read {
-        let content = repo.read_clyp(name);
-        ctx.set_contents(content)
-            .expect("could not add to clipboard");
+    if opts.clear {
+        repo.clear_clyps();
+    } else {
+        save_or_read_clyp(opts.save, opts.read, opts.name.unwrap(), repo);
     }
-
     Ok(())
 }
 
-#[cfg(test)]
-mod path_tests {
-    #[test]
-    fn check_answer_validity() {
-        assert_eq!(2 + 2, 4);
+fn save_or_read_clyp(save: bool, read: bool, name: String, repo: ClypRepository) {
+    let mut ctx: ClipboardContext = ClipboardProvider::new().unwrap();
+
+    if save {
+        let content = ctx.get_contents().expect("could not read from clipboard");
+        repo.save_clyp(name, content);
+    } else if read {
+        let content = repo.read_clyp(name);
+        ctx.set_contents(content)
+            .expect("could not add to clipboard");
     }
 }
