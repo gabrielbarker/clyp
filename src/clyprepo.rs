@@ -36,6 +36,14 @@ impl ClypRepository {
       let file_path = file.unwrap().path();
       let metadata = std::fs::metadata(file_path.clone()).expect("");
       // let duration = metadata.modified().unwrap().duration_since(time).unwrap();
+
+      println!(
+        "{}",
+        metadata.modified().unwrap().elapsed().unwrap().as_millis()
+      );
+      println!("{}", time.elapsed().unwrap().as_millis());
+
+      println!("{}", metadata.modified().unwrap() > time);
       if metadata.modified().unwrap() > time {
         time = metadata.modified().unwrap();
         path = file_path;
