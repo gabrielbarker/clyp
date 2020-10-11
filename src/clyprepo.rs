@@ -28,6 +28,20 @@ impl ClypRepository {
     create_dir(&self.clyps_dir).expect("could not create clyps directory");
   }
 
+  pub fn list_clyps(&self) {
+    for file in read_dir(&self.clyps_dir).unwrap() {
+      let file_name = file
+        .unwrap()
+        .path()
+        .file_name()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_string();
+      println!("{}", file_name);
+    }
+  }
+
   pub fn get_most_recent_clyp(&self) -> String {
     let dir = read_dir(&self.clyps_dir);
     let mut time = std::time::SystemTime::UNIX_EPOCH;

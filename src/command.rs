@@ -16,6 +16,9 @@ struct Opts {
   /// Clear all saved clyps
   #[structopt(short, long)]
   clear: bool,
+  /// List all saved clyps
+  #[structopt(short, long)]
+  list: bool,
   /// The name of the clyp
   name: Option<String>,
 }
@@ -24,7 +27,9 @@ pub fn run_clyp_command(clyps_dir: &str) -> Result<(), Box<dyn std::error::Error
   let repo = ClypRepository::new(clyps_dir.to_string());
   let opts = Opts::from_args();
 
-  if opts.clear {
+  if opts.list {
+    repo.list_clyps();
+  } else if opts.clear {
     repo.clear_clyps();
   } else {
     save_or_read_clyp(opts.save, opts.read, opts.name, repo);
