@@ -28,11 +28,13 @@ before_deploy:
   - cp target/$TARGET/release/clyp $name/
   - cp README.md LICENSE $name/
   - tar czvf $name.tar.gz $name
+
 deploy:
   provider: releases
   api_key: *GITHUB_TOKEN
   file: clyp-test-release.tar.gz
   skip_cleanup: true
+  draft: true
   on:
     branch: master
     tags: true
