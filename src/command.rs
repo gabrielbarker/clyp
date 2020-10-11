@@ -23,8 +23,8 @@ struct Opts {
   name: Option<String>,
 }
 
-pub fn run_clyp_command(clyps_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
-  let repo = ClypRepository::new(clyps_dir.to_string());
+pub fn run_clyp_command(clyps_dir: std::path::PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+  let repo = ClypRepository::new(clyps_dir);
   let opts = Opts::from_args();
 
   if opts.list {
