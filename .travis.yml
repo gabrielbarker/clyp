@@ -19,20 +19,19 @@ install:
 script:
   - ci/script.bash
 
-DEPLOY_TO_GITHUB: &DEPLOY_TO_GITHUB
-  before_deploy:
-    - git config --local user.name "Gabriel Barker"
-    - git config --local user.email "$GITHUB_EMAIL"
-    - name="clyp-test-release"
-    - mkdir $name
-    - cp target/$TARGET/release/clyp $name/
-    - cp README.md LICENSE $name/
-    - tar czvf $name.tar.gz $name
-  deploy:
-    provider: releases
-    api_key: *GITHUB_TOKEN
-    file: clyp-test-release.tar.gz
-    skip_cleanup: true
-    on:
-      branch: master
-      tags: true
+before_deploy:
+  - git config --local user.name "Gabriel Barker"
+  - git config --local user.email "$GITHUB_EMAIL"
+  - name="clyp-test-release"
+  - mkdir $name
+  - cp target/$TARGET/release/clyp $name/
+  - cp README.md LICENSE $name/
+  - tar czvf $name.tar.gz $name
+deploy:
+  provider: releases
+  api_key: *GITHUB_TOKEN
+  file: clyp-test-release.tar.gz
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: true
