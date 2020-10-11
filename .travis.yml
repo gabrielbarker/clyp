@@ -11,5 +11,15 @@ matrix:
       rust: stable
       env: TARGET=x86_64-apple-darwin
 
+before_install:
+  - ci/before_install.bash
+
+env:
+  global:
+    - HOST=x86_64-unknown-linux-gnu
+
+install:
+  - if [[ $TRAVIS_OS_NAME = linux && $HOST != $TARGET ]]; then rustup target add $TARGET; fi
+
 script:
-  - cargo test
+  - ci/script.bash
