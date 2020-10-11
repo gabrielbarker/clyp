@@ -4,7 +4,9 @@ matrix:
   include:
     - os: linux
       rust: stable
-      env: TARGET=x86_64-unknown-linux-gnu
+      env:
+        - TARGET=x86_64-unknown-linux-gnu
+        - RUSTFLAGS="-C linker=x86_64-unknown-linux-gnu"
     - os: osx
       rust: stable
       env: TARGET=x86_64-apple-darwin
