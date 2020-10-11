@@ -60,5 +60,5 @@ fn get_name(name: Option<String>) -> String {
   if name.is_some() {
     return name.unwrap();
   }
-  return ".temporary".to_string();
+  return ".default".to_string();
 }
