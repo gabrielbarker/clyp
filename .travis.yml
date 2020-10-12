@@ -20,7 +20,7 @@ before_deploy:
   - tag="${name%\"}"
   - tag="${tag#\"}"
   - git tag $tag
-  - mkdir $name
+  - mkdir $tag
   - cp target/$TARGET/release/clyp $tag/
   - cp README.md LICENSE $tag/
   - tar czvf $tag.tar.gz $tag
