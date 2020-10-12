@@ -37,4 +37,3 @@ deploy:
   draft: true
   on:
     branch: main
-    tags: true
