@@ -17,7 +17,9 @@ before_deploy:
   - git config --local user.email "$GITHUB_EMAIL"
   - HOMEBREW_NO_AUTO_UPDATE=1 brew install jq
   - name=$(curl https://qual-id.herokuapp.com/get/\?pattern\=food-animal | jq '.data[] | "clyp-\(.)"')
-  - git tag $name
+  - tag="${name%\"}"
+  - tag="${temp#\"}"
+  - git tag $tag
   - mkdir $name
   - cp target/$TARGET/release/clyp $name/
   - cp README.md LICENSE $name/
