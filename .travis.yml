@@ -12,7 +12,7 @@ script:
   - cargo test --target "$TARGET"
 
 before_deploy:
-  - cargo test --target "$TARGET" --release
+  - cargo build --target "$TARGET" --release
   - git config --local user.name "Gabriel Barker"
   - git config --local user.email "$GITHUB_EMAIL"
   - name="clyp-test-release"
@@ -31,4 +31,3 @@ deploy:
   on:
     repo: gabrielbarker/clyp
     branch: main
-  skip_cleanup: "true"
