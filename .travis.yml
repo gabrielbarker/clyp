@@ -1,5 +1,6 @@
 language: rust
 cache: cargo
+
 matrix:
   include:
     - os: osx
@@ -23,9 +24,11 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key: "GITHUB_TOKEN"
+  api_key:
+    secure: AzNtLp8LrS60ChpOalOnmWSXzCzQhZJEyr+BCMx/maO867SmOY9nfsAD2wnfq3Ju5oNzrGz689/i/nzstHoA8byGhEkABRQBF7Pg+qy/2IZGDqTnorvR9SzmmYPzpmX33jA4AAOOEcxKQRSh19HT1v7Gomuo4OLdz6zBUNhH0qKq7JS7bP99fonniYPSJDU0NirVP11hd3h7A+uU6sKQtbUD8mDr7L/F2cMhw6D1jP2eytGzDFtUPYRqaih2W6dr1eXh53yiAL9NEntUpDFs7da/XDe6eIaT1MBUzGEfKhQh5Sv/lbqR8W1HkL2Ut500ZxWT+T5WS7ctVa29KdmTKUeY46G1LrVqqLaUzEtn+O2V5hTFKZAhm231Oob1+/8teB2bmGxuI+infsfGyfxY9q0US50eHYpb4j0Nde+roRCi2G/KK3TYfDcn70uJ+3deglJt+15wOwvxciMReT1Oiowh8aTIfECM8LP+LoTX6EIZfyEqI3fw7k6+E2R9/V/YnVWzGdt3g814V0J5/UaiImpSylLh0WfcI0uI9IUOPzBkukvb6dd5k1+xe0SO2sPtV5rVT8AM7Qf+oJVTDpdbStCE1uWA6zOhVOVrZp1wzro0vJeHq34tQc1Gg3dRi/B7cRQhB6OgHmQDCdxkFW7volb9tSSBBtN84QsnMSaiTBE=
   file: clyp-test-release.tar.gz
-  skip_cleanup: true
   draft: true
   on:
+    repo: gabrielbarker/clyp
     branch: main
+  skip_cleanup: "true"
