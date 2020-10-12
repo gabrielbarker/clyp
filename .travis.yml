@@ -31,3 +31,4 @@ deploy:
   on:
     repo: gabrielbarker/clyp
     branch: main
+  skip_cleanup: true
