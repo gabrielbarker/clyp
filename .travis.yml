@@ -7,8 +7,8 @@ matrix:
       env: TARGET=x86_64-apple-darwin
 
 script:
-  - cargo build --target "$TARGET" --verbose
-  - cargo test --target "$TARGET" --verbose
+  - cargo build --target "$TARGET"
+  - cargo test --target "$TARGET"
 
 before_deploy:
   - cargo test --target "$TARGET" --release
@@ -23,7 +23,7 @@ before_deploy:
 
 deploy:
   provider: releases
-  api_key: *GITHUB_TOKEN
+  api_key: "GITHUB_TOKEN"
   file: clyp-test-release.tar.gz
   skip_cleanup: true
   draft: true
