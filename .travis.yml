@@ -16,7 +16,7 @@ before_deploy:
   - git config --local user.name "Gabriel Barker"
   - git config --local user.email "$GITHUB_EMAIL"
   - name="clyp-test-release"
-  - git tag 'v0.0.1'
+  - git tag 'v0.0.2'
   - mkdir $name
   - cp target/$TARGET/release/clyp $name/
   - cp README.md LICENSE $name/
