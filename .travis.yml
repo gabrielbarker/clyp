@@ -15,7 +15,7 @@ before_deploy:
   - cargo build --target "$TARGET" --release
   - git config --local user.name "Gabriel Barker"
   - git config --local user.email "$GITHUB_EMAIL"
-  - name=$(clyp-$(curl https://qual-id.herokuapp.com/get/\?pattern\=fruit-geography\&format\=csv))
+  - name=clyp-$(curl https://qual-id.herokuapp.com/get/\?pattern\=fruit-geography\&format\=csv)
   - tag="${name%\"}"
   - tag="${tag#\"}"
   - git tag $tag
